@@ -18,6 +18,6 @@ pub fn cli_run_example() -> bool {
             "-e" => example = true,
             x => panic!("{x:?} is not a recognized CLI switch"),
         }
-    };
+    }
     example
 }

@@ -4,7 +4,10 @@ use std::{
     path::{Path, PathBuf},
 };
 
-pub fn input(day: u32, example: bool) -> Result<impl Iterator<Item = Result<String, InputError>>, InputError> {
+pub fn input(
+    day: u32,
+    example: bool,
+) -> Result<impl Iterator<Item = Result<String, InputError>>, InputError> {
     let bin = format!("d{day:02}");
 
     let input_folder = match example {
