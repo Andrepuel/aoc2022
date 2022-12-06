@@ -6,9 +6,9 @@ pub use error::Result;
 pub use input::input;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub struct Answer {
-    pub part1: u32,
-    pub part2: u32,
+pub struct Answer<T = u32> {
+    pub part1: T,
+    pub part2: T,
 }
 
 pub fn cli_run_example() -> bool {
