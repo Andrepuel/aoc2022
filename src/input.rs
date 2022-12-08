@@ -7,7 +7,7 @@ use std::{
 pub fn input(
     day: u32,
     example: bool,
-) -> Result<impl Iterator<Item = Result<String, InputError>>, InputError> {
+) -> Result<impl Iterator<Item = InputResult<String>>, InputError> {
     let bin = format!("d{day:02}");
 
     let input_folder = match example {
@@ -23,6 +23,9 @@ pub fn input(
         .lines()
         .map(move |r| r.map_err(|e| InputError(input_path2.clone(), e))))
 }
+
+impl<S: Iterator<Item = InputResult<String>>> Input for S {}
+pub trait Input: Iterator<Item = InputResult<String>> {}
 
 #[derive(thiserror::Error, Debug)]
 #[error("Error opening input {0}: {1}")]
