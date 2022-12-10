@@ -11,7 +11,7 @@ pub struct Answer<T = u32> {
     pub part2: T,
 }
 
-pub fn cli_run_example() -> bool {
+fn cli_run_example() -> bool {
     let mut example = false;
     for arg in std::env::args().skip(1) {
         match arg.as_str() {
@@ -20,4 +20,13 @@ pub fn cli_run_example() -> bool {
         }
     }
     example
+}
+
+pub fn main_impl<T: std::fmt::Debug, F: FnOnce(input::InputImpl) -> Result<Answer<T>>>(
+    day: u32,
+    answer: F,
+) -> Result<()> {
+    println!("{:?}", answer(input(day, cli_run_example()))?);
+
+    Ok(())
 }

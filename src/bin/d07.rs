@@ -1,5 +1,5 @@
 use aoc::{
-    input::{InputError, InputResult},
+    input::{Input, InputError},
     Answer,
 };
 use std::{iter::Peekable, num::ParseIntError, str::FromStr};
@@ -12,9 +12,7 @@ enum TerminalLine {
     Output(Output),
 }
 impl TerminalLine {
-    fn input<I: Iterator<Item = InputResult<String>>>(
-        input: I,
-    ) -> impl Iterator<Item = ParseResult<Self>> {
+    fn input<I: Input>(input: I) -> impl Iterator<Item = ParseResult<Self>> {
         input.map(|str| str?.parse())
     }
 }
@@ -240,7 +238,7 @@ impl<E: std::error::Error + Send + Sync + 'static> From<DirectoryError<E>> for a
 }
 type DirectoryResult<T, E> = Result<T, DirectoryError<E>>;
 
-fn answer<I: Iterator<Item = InputResult<String>>>(input: I) -> aoc::Result<Answer<usize>> {
+fn answer<I: Input>(input: I) -> aoc::Result<Answer<usize>> {
     let terminal = TerminalLine::input(input);
     let root = Directory::fill(terminal)?;
 
@@ -274,15 +272,13 @@ fn answer<I: Iterator<Item = InputResult<String>>>(input: I) -> aoc::Result<Answ
 }
 
 fn main() -> aoc::Result<()> {
-    println!("{:?}", answer(aoc::input(DAY, aoc::cli_run_example())?)?);
-
-    Ok(())
+    aoc::main_impl(DAY, answer)
 }
 
 #[test]
 fn d07_example() {
     assert_eq!(
-        answer(aoc::input(DAY, true).unwrap()).unwrap(),
+        answer(aoc::input(DAY, true)).unwrap(),
         Answer {
             part1: 95437,
             part2: 24933642

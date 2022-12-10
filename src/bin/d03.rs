@@ -1,7 +1,7 @@
 use std::{collections::HashSet, hash::Hash};
 
 use aoc::{
-    input::{InputError, InputResult},
+    input::{Input, InputError},
     Answer,
 };
 
@@ -42,9 +42,7 @@ struct Rucksack {
     all: HashSet<Item>,
 }
 impl Rucksack {
-    fn input<I: Iterator<Item = InputResult<String>>>(
-        input: I,
-    ) -> impl Iterator<Item = ParseResult<Self>> {
+    fn input<I: Input>(input: I) -> impl Iterator<Item = ParseResult<Self>> {
         input.map(|r_line| {
             let line = r_line?;
             let itens = line.as_bytes();
@@ -105,7 +103,7 @@ impl From<ParseError> for aoc::Error {
 }
 type ParseResult<T> = Result<T, ParseError>;
 
-fn answer<I: Iterator<Item = InputResult<String>>>(input: I) -> aoc::Result<Answer> {
+fn answer<I: Input>(input: I) -> aoc::Result<Answer> {
     let rucksacks = Rucksack::input(input);
 
     let mut every_three = ThreeRucksacks::default();
@@ -141,15 +139,13 @@ fn answer<I: Iterator<Item = InputResult<String>>>(input: I) -> aoc::Result<Answ
 }
 
 fn main() -> aoc::Result<()> {
-    println!("{:?}", answer(aoc::input(DAY, aoc::cli_run_example())?)?);
-
-    Ok(())
+    aoc::main_impl(DAY, answer)
 }
 
 #[test]
 fn d03_example() {
     assert_eq!(
-        answer(aoc::input(DAY, true).unwrap()).unwrap(),
+        answer(aoc::input(DAY, true)).unwrap(),
         Answer {
             part1: 157,
             part2: 70

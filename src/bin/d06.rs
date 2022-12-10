@@ -1,4 +1,4 @@
-use aoc::{input::InputResult, Answer};
+use aoc::{input::Input, Answer};
 use bitvec::prelude::BitArray;
 
 const DAY: u32 = 6;
@@ -32,7 +32,7 @@ impl Protocol {
     }
 }
 
-fn answer<I: Iterator<Item = InputResult<String>>>(input: I) -> aoc::Result<Answer<Vec<usize>>> {
+fn answer<I: Input>(input: I) -> aoc::Result<Answer<Vec<usize>>> {
     let size_hint = input.size_hint().1.unwrap_or_default();
     let mut packets = Vec::with_capacity(size_hint);
     let mut messages = Vec::with_capacity(size_hint);
@@ -50,15 +50,13 @@ fn answer<I: Iterator<Item = InputResult<String>>>(input: I) -> aoc::Result<Answ
 }
 
 fn main() -> aoc::Result<()> {
-    println!("{:?}", answer(aoc::input(DAY, aoc::cli_run_example())?)?);
-
-    Ok(())
+    aoc::main_impl(DAY, answer)
 }
 
 #[test]
 fn d06_example() {
     assert_eq!(
-        answer(aoc::input(DAY, true).unwrap()).unwrap(),
+        answer(aoc::input(DAY, true)).unwrap(),
         Answer {
             part1: vec![7, 5, 6, 10, 11],
             part2: vec![19, 23, 23, 29, 26]

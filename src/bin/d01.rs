@@ -1,5 +1,5 @@
 use aoc::{
-    input::{InputError, InputResult},
+    input::{Input, InputError},
     Answer,
 };
 use itertools::Itertools;
@@ -12,9 +12,7 @@ struct Elf {
     total: u32,
 }
 impl Elf {
-    fn input<I: Iterator<Item = InputResult<String>>>(
-        input: I,
-    ) -> impl Iterator<Item = ParseResult<Self>> {
+    fn input<I: Input>(input: I) -> impl Iterator<Item = ParseResult<Self>> {
         let mut last = Elf::default();
 
         input
@@ -45,7 +43,7 @@ impl Elf {
     }
 }
 
-fn answer<I: Iterator<Item = InputResult<String>>>(input: I) -> aoc::Result<Answer> {
+fn answer<I: Input>(input: I) -> aoc::Result<Answer> {
     let elves = Elf::input(input);
 
     let mut best_three = [Elf::default(), Elf::default(), Elf::default()];
@@ -69,9 +67,7 @@ fn answer<I: Iterator<Item = InputResult<String>>>(input: I) -> aoc::Result<Answ
 }
 
 fn main() -> aoc::Result<()> {
-    println!("{:?}", answer(aoc::input(DAY, aoc::cli_run_example())?));
-
-    Ok(())
+    aoc::main_impl(DAY, answer)
 }
 
 #[derive(thiserror::Error, Debug)]
@@ -93,7 +89,7 @@ type ParseResult<T> = Result<T, ParseError>;
 #[test]
 fn d01_example() {
     assert_eq!(
-        answer(aoc::input(DAY, true).unwrap()).unwrap(),
+        answer(aoc::input(DAY, true)).unwrap(),
         Answer {
             part1: 24000,
             part2: 45000,

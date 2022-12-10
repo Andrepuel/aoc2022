@@ -258,15 +258,13 @@ fn answer<I: Input>(input: I) -> aoc::Result<Answer<usize>> {
 }
 
 fn main() -> aoc::Result<()> {
-    println!("{:?}", answer(aoc::input(DAY, aoc::cli_run_example())?)?);
-
-    Ok(())
+    aoc::main_impl(DAY, answer)
 }
 
 #[test]
 fn d08_example() {
     assert_eq!(
-        answer(aoc::input(DAY, true).unwrap()).unwrap(),
+        answer(aoc::input(DAY, true)).unwrap(),
         Answer {
             part1: 21,
             part2: 8,

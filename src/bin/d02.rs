@@ -1,5 +1,5 @@
 use aoc::{
-    input::{InputError, InputResult},
+    input::{Input, InputError},
     Answer,
 };
 use std::str::FromStr;
@@ -105,9 +105,7 @@ pub struct Match {
     desired: GameOutcome,
 }
 impl Match {
-    fn input<I: Iterator<Item = InputResult<String>>>(
-        input: I,
-    ) -> impl Iterator<Item = ParseResult<Self>> {
+    fn input<I: Input>(input: I) -> impl Iterator<Item = ParseResult<Self>> {
         input
             .map(|r| r.map_err(ParseError::from))
             .map(|r_line| r_line.and_then(|x| x.parse()))
@@ -156,7 +154,7 @@ impl From<ParseError> for aoc::Error {
 }
 type ParseResult<T> = Result<T, ParseError>;
 
-fn answer<I: Iterator<Item = InputResult<String>>>(input: I) -> aoc::Result<Answer> {
+fn answer<I: Input>(input: I) -> aoc::Result<Answer> {
     let matches = Match::input(input);
 
     let mut total_score = 0;
@@ -174,15 +172,13 @@ fn answer<I: Iterator<Item = InputResult<String>>>(input: I) -> aoc::Result<Answ
 }
 
 fn main() -> aoc::Result<()> {
-    println!("{:?}", answer(aoc::input(DAY, aoc::cli_run_example())?)?);
-
-    Ok(())
+    aoc::main_impl(DAY, answer)
 }
 
 #[test]
 pub fn d02_example() {
     assert_eq!(
-        answer(aoc::input(DAY, true).unwrap()).unwrap(),
+        answer(aoc::input(DAY, true)).unwrap(),
         Answer {
             part1: 15,
             part2: 12,

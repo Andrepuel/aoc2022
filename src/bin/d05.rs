@@ -1,5 +1,5 @@
 use aoc::{
-    input::{InputError, InputResult},
+    input::{Input, InputError},
     Answer,
 };
 use itertools::Itertools;
@@ -12,7 +12,7 @@ struct Crates {
     stack: Vec<CrateStack>,
 }
 impl Crates {
-    fn input<I: Iterator<Item = InputResult<String>>>(input: &mut I) -> ParseResult<Self> {
+    fn input<I: Input>(input: &mut I) -> ParseResult<Self> {
         let mut stack = Vec::<CrateStack>::new();
 
         'input: for line in input {
@@ -99,9 +99,7 @@ struct Movement {
     to: usize,
 }
 impl Movement {
-    fn input<I: Iterator<Item = InputResult<String>>>(
-        input: I,
-    ) -> impl Iterator<Item = ParseResult<Self>> {
+    fn input<I: Input>(input: I) -> impl Iterator<Item = ParseResult<Self>> {
         input
             .filter_map_ok(|line| {
                 let line = line.trim();
@@ -219,7 +217,7 @@ impl From<ParseError> for aoc::Error {
 }
 type ParseResult<T> = Result<T, ParseError>;
 
-fn answer<I: Iterator<Item = InputResult<String>>>(mut input: I) -> aoc::Result<Answer<String>> {
+fn answer<I: Input>(mut input: I) -> aoc::Result<Answer<String>> {
     let mut crates = Crates::input(input.by_ref())?;
     let mut crates9001 = crates.clone();
     for movement in Movement::input(input) {
@@ -236,15 +234,13 @@ fn answer<I: Iterator<Item = InputResult<String>>>(mut input: I) -> aoc::Result<
 }
 
 fn main() -> aoc::Result<()> {
-    println!("{:?}", answer(aoc::input(DAY, aoc::cli_run_example())?)?);
-
-    Ok(())
+    aoc::main_impl(DAY, answer)
 }
 
 #[test]
 fn d05_example() {
     assert_eq!(
-        answer(aoc::input(DAY, true).unwrap()).unwrap(),
+        answer(aoc::input(DAY, true)).unwrap(),
         Answer {
             part1: "CMZ".to_string(),
             part2: "MCD".to_string()

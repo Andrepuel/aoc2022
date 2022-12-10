@@ -1,5 +1,5 @@
 use aoc::{
-    input::{InputError, InputResult},
+    input::{Input, InputError},
     Answer,
 };
 use std::{
@@ -14,9 +14,7 @@ struct AssigmentPair {
     right: RangeInclusive<u32>,
 }
 impl AssigmentPair {
-    fn input<I: Iterator<Item = InputResult<String>>>(
-        input: I,
-    ) -> impl Iterator<Item = ParseResult<Self>> {
+    fn input<I: Input>(input: I) -> impl Iterator<Item = ParseResult<Self>> {
         input.map(|line| line?.parse())
     }
 
@@ -94,7 +92,7 @@ impl From<ParseError> for aoc::Error {
 }
 type ParseResult<T> = Result<T, ParseError>;
 
-fn answer<I: Iterator<Item = InputResult<String>>>(input: I) -> aoc::Result<Answer> {
+fn answer<I: Input>(input: I) -> aoc::Result<Answer> {
     let assigments = AssigmentPair::input(input);
 
     let mut contained = 0;
@@ -116,15 +114,13 @@ fn answer<I: Iterator<Item = InputResult<String>>>(input: I) -> aoc::Result<Answ
 }
 
 fn main() -> aoc::Result<()> {
-    println!("{:?}", answer(aoc::input(DAY, aoc::cli_run_example())?)?);
-
-    Ok(())
+    aoc::main_impl(DAY, answer)
 }
 
 #[test]
 fn d04_example() {
     assert_eq!(
-        answer(aoc::input(DAY, true).unwrap()).unwrap(),
+        answer(aoc::input(DAY, true)).unwrap(),
         Answer { part1: 2, part2: 4 }
     )
 }
