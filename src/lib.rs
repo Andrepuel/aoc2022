@@ -6,9 +6,9 @@ pub use error::Result;
 pub use input::input;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub struct Answer<T = u32> {
+pub struct Answer<T = u32, T2 = T> {
     pub part1: T,
-    pub part2: T,
+    pub part2: T2,
 }
 
 fn cli_run_example() -> bool {
@@ -22,11 +22,13 @@ fn cli_run_example() -> bool {
     example
 }
 
-pub fn main_impl<T: std::fmt::Debug, F: FnOnce(input::InputImpl) -> Result<Answer<T>>>(
-    day: u32,
-    answer: F,
-) -> Result<()> {
-    println!("{:?}", answer(input(day, cli_run_example()))?);
+pub fn main_impl<T, T2, F>(day: u32, answer: F) -> Result<()>
+where
+    T: std::fmt::Debug,
+    T2: std::fmt::Debug,
+    F: FnOnce(input::InputImpl) -> Result<Answer<T, T2>>,
+{
+    println!("{:#?}", answer(input(day, cli_run_example()))?);
 
     Ok(())
 }
